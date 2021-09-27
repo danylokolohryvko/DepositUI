@@ -180,4 +180,131 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+
+    /*-----------------------------------------------------------------------*/
+
+    h1 {
+        text-align: center;
+    }
+
+    div {
+        text-align: center;
+    }
+
+    input {
+        margin-bottom: 10px;
+    }
+
+    .deposit-btn-cont {
+        width: 100%;
+        display: block;
+    }
+
+    .align-left {
+        float: left;
+        margin-left: 10px;
+        text-align: left;
+    }
+
+    .align-right {
+        float: right;
+        margin-right: 10px;
+        text-align: left;
+    }
+
+    .details-btn {
+        margin-top: 50px;
+        margin-bottom: 10px;
+    }
+
+    .deposit-block {
+        border: 1px solid black;
+        margin-top: 10px;
+        width: 80%;
+    }
+
+    .deposit-details {
+        min-width: 300px;
+        display: block;
+    }
+
+    .history {
+        height: 500px;
+    }
+
+    .tab {
+        margin-top: 10px;
+    }
+
+    .request-error {
+        color: red;
+    }
+
+    .submit-btn {
+        border-radius: 5px;
+    }
+
+    .result-table {
+        border-collapse: collapse;
+    }
+
+    .table-head {
+        background-color: lightgray;
+    }
+
+    .table-cell {
+        border: 1px solid gray;
+    }
+
+    .skrollable::-webkit-scrollbar {
+        width: 1em;
+        border: 1px solid gray;
+    }
+
+    .skrollable::-webkit-scrollbar-button:single-button {
+        background-color: #bbbbbb;
+        display: block;
+        border-style: solid;
+        height: 13px;
+        width: 16px;
+    }
+
+    .skrollable::-webkit-scrollbar-button:vertical:decrement {
+        border-width: 0 7px 14px 7px;
+        border-color: transparent transparent #404040 transparent;
+    }
+
+        .skrollable::-webkit-scrollbar-button:vertical:decrement:hover {
+            border-color: transparent transparent #505050 transparent;
+        }
+
+    .skrollable::-webkit-scrollbar-button:vertical:increment {
+        border-width: 14px 7px 0 7px;
+        border-color: #404040 transparent transparent transparent;
+    }
+
+        .skrollable::-webkit-scrollbar-button:vertical:increment:hover {
+            border-color: #505050 transparent transparent transparent;
+        }
+
+    .skrollable::-webkit-scrollbar-thumb {
+        background-color: lightgrey;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+
+    .skrollable {
+        display: block;
+        overflow: auto;
+    }
+
+    tbody {
+        height: 500px;
+    }
+
+        thead, tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
 }

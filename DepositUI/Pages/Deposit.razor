@@ -1,0 +1,41 @@
+﻿@page "/deposit"
+
+@using DepositUI.Data
+@using DepositUI.Components
+@using System.Text.Json
+@using System.Text.Json.Serialization;
+@using System.Net.Http.Json;
+@inject IHttpClientFactory ClientFactory;
+
+<h1>Deposit Calculations</h1>
+
+<div class="col-8">
+    <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+    <button @onclick="GetDepositCalc">dddd</button>
+</div>
+
+@code {
+    private List<DepositCalc> depositDetails;
+
+    private HttpResponseMessage response = null;
+
+    private async Task GetDepositCalc()
+    {
+        DepositModel deposit = new DepositModel()
+        {
+            Amount = 1000,
+            Percent = 12,
+            Term = 24
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44365/api/calculate");
+        request.Content = JsonContent.Create<DepositModel>(deposit);
+
+        var client = ClientFactory.CreateClient();
+        response = await client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
+        }
+    }
+}
