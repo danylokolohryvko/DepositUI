@@ -42,6 +42,58 @@
         </div>
     </div>
 }
+else if (mode == "History")
+{
+<div class="skrollable history">
+    <div class="row">
+        @for (int i = 0; i < 4; i++)
+        {
+            <div class="col-3">
+                @if (deposits != null)
+                {
+                    @for (int j = 0; j < deposits.Count; j++)
+                    {
+                        if (j * 4 + i < deposits.Count)
+                        {
+                            var depositNumber = j * 4 + i;
+                            <div class="deposit-block">
+                                <div class="deposit-details">
+                                    <div class="align-left">
+                                        <span>Percent:</span><br />
+                                        <span>Term:</span><br />
+                                        <span>Sum:</span><br />
+                                        <span>Date:</span>
+                                    </div>
+                                    <div class=" align-right">
+                                        <span>@(deposits[depositNumber].Percent)%</span><br />
+                                        <span>@(deposits[depositNumber].Term)</span><br />
+                                        <span>@(deposits[depositNumber].Amount)$</span><br />
+                                        <span>@(deposits[depositNumber].Date.ToString("dd.MM.yyyy"))</span>
+                                    </div>
+                                </div>
+                                <div class="deposit-btn-cont">
+                                    <button @onclick="() => Details(deposits[depositNumber].Id)" class="details-btn">See details</button>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        }
+    </div>
+    <button class="details-btn" @onclick="LoadMore">Load More</button>
+</div>
+}
+else if (mode == "Details")
+{
+    <div class="tab">
+        <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+        <form action="https://localhost:44320/api/depositcalc/csv">
+            <input type="hidden" name="depositId" value="@depositId" />
+            <button type="submit" class="submit-btn">Export to CSV</button>
+        </form>
+    </div>
+}
 
 @code {
     private string mode = "Main";
@@ -61,11 +113,50 @@
     private bool getDepositError;
     private HttpResponseMessage response = null;
 
-    private async Task Main() { }
+    private List<DepositModel> deposits;
+    private int nextdeposit = 0;
 
-    private async Task History() { }
+    private int depositId;
 
-    private async Task Details() { }
+    private void Main()
+    {
+        depositDetails = null;
+        mode = "Main";
+    }
+
+    private async Task History()
+    {
+        deposits = await GetDepositModels(0, 16);
+        nextdeposit += deposits.Count;
+        mode = "History";
+    }
+
+    private async Task Details(int depositId)
+    {
+        var model = new GetDepositDetails
+        {
+            DepositId = depositId
+        };
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/depositcalc");
+        request.Content = JsonContent.Create<GetDepositDetails>(model);
+
+        var client = ClientFactory.CreateClient();
+        response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
+        }
+        this.depositId = depositId;
+        mode = "Details";
+    }
+
+    private async Task LoadMore()
+    {
+        var loaded = await GetDepositModels(nextdeposit, 16);
+        deposits.AddRange(loaded);
+        nextdeposit += loaded.Count;
+    }
 
     private async Task GetDepositCalc()
     {
@@ -111,7 +202,7 @@
             Term = term
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44365/api/calculate");
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/calculate");
         request.Content = JsonContent.Create<DepositModel>(deposit);
 
         var client = ClientFactory.CreateClient();
@@ -122,10 +213,29 @@
         }
         else
         {
-            using var responseStream = await response.Content.ReadAsStreamAsync();
-            requestErrors.AddRange(await JsonSerializer.DeserializeAsync<List<RequestError>>(responseStream));
+            requestErrors.AddRange(await response.Content.ReadFromJsonAsync<List<RequestError>>());
             getDepositError = true;
         }
+    }
+
+    private async Task<List<DepositModel>> GetDepositModels(int startIndex, int count)
+    {
+        var model = new GetDepositsModel
+        {
+            StartIndex = startIndex,
+            Count = count
+        };
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/deposit");
+        request.Content = JsonContent.Create<GetDepositsModel>(model);
+
+        var client = ClientFactory.CreateClient();
+        response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<DepositModel>>();
+        }
+        return null;
     }
 
     private string NumberInputCheck(string input)
