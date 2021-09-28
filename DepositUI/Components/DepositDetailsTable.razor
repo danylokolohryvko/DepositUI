@@ -1,0 +1,27 @@
+﻿@using DepositUI.Data
+<table class="result-table">
+    <thead class="table-head">
+        <tr>
+            <th class="table-cell">Month</th>
+            <th class="table-cell">%</th>
+            <th class="table-cell">Sum</th>
+        </tr>
+    </thead>
+    <tbody class="skrollable">
+        @if (DepositDetails != null)
+        {
+            @foreach (DepositCalc deposit in DepositDetails)
+            {
+                <tr>
+                    <td class="table-cell">@deposit.Month</td>
+                    <td class="table-cell">@deposit.PercentAdded</td>
+                    <td class="table-cell">@deposit.TotalAmount</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@code {
+    [Parameter]
+    public List<DepositCalc> DepositDetails { get; set; }
+}
