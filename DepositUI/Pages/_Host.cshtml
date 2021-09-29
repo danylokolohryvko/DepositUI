@@ -32,5 +32,17 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function tableResize () {
+            $(".td1").width($(".th1").width());
+            $(".td2").width($(".th2").width());
+        }
+
+        function SetTableResize() {
+            $(window).resize(tableResize);
+            tableResize();
+        }
+    </script>
 </body>
 </html>
