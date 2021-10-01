@@ -1,4 +1,5 @@
 ﻿using DepositUI.Data;
+using DepositUI.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace DepositUI.Pages
 {
     public partial class Deposit
     {
-        private string mode = "Main";
+        private ModeType mode = ModeType.Main;
 
         private List<DepositCalc> depositDetails;
         private List<RequestError> requestErrors;
@@ -35,14 +36,14 @@ namespace DepositUI.Pages
         private void Main()
         {
             depositDetails = null;
-            mode = "Main";
+            mode = ModeType.Main;
         }
 
         private async Task History()
         {
             deposits = await GetDepositModels(0, 16);
             nextdeposit += deposits.Count;
-            mode = "History";
+            mode = ModeType.History;
         }
 
         private async Task Details(int depositId)
@@ -62,7 +63,7 @@ namespace DepositUI.Pages
                 depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
             }
             this.depositId = depositId;
-            mode = "Details";
+            mode = ModeType.Details;
         }
 
         private async Task LoadMore()

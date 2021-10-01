@@ -1,19 +1,20 @@
 ﻿@page "/deposit"
 @using DepositUI.Data
 @using DepositUI.Components
+@using DepositUI.Enums
 @inject IHttpClientFactory ClientFactory;
 
 <h1>Deposit Calculations</h1>
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a @onclick="Main" class="nav-link@(mode == "Main" ? " active" : "")">Calculations</a>
+        <a @onclick="Main" class="nav-link@(mode == ModeType.Main ? " active" : "")">Calculations</a>
     </li>
     <li class="nav-item">
-        <a @onclick="History" class="nav-link@(mode != "Main" ? " active" : "")">History</a>
+        <a @onclick="History" class="nav-link@(mode != ModeType.Main ? " active" : "")">History</a>
     </li>
 </ul>
-@if (mode == "Main")
+@if (mode == ModeType.Main)
 {
     <div class="row tab">
         <div class="col-4">
@@ -38,7 +39,7 @@
         </div>
     </div>
 }
-else if (mode == "History")
+else if (mode == ModeType.History)
 {
 <div class="skrollable history">
     <div class="row">
@@ -80,7 +81,7 @@ else if (mode == "History")
     <button class="details-btn" @onclick="LoadMore">Load More</button>
 </div>
 }
-else if (mode == "Details")
+else if (mode == ModeType.Details)
 {
     <div class="tab">
         <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
