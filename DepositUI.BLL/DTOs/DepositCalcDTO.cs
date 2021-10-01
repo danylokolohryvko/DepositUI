@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DepositUI.BLL.DTOs
+﻿namespace DepositUI.BLL.DTOs
 {
     public class DepositCalcDTO
     {

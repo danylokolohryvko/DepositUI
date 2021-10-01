@@ -1,16 +1,21 @@
-﻿using DepositUI.Data;
+﻿using AutoMapper;
+using DepositUI.BLL.DTOs;
+using DepositUI.BLL.Interfaces;
+using DepositUI.Data;
 using DepositUI.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace DepositUI.Pages
 {
     public partial class Deposit
     {
+        private readonly IDepositService depositService;
+
+        private readonly IMapper mapper;
+
         private ModeType mode = ModeType.Main;
 
         private List<DepositCalc> depositDetails;
@@ -26,12 +31,17 @@ namespace DepositUI.Pages
         private string percentStr;
 
         private bool getDepositError;
-        private HttpResponseMessage response = null;
 
         private List<DepositModel> deposits;
         private int nextdeposit = 0;
 
         private int depositId;
+
+        public Deposit(IDepositService depositService, IMapper mapper)
+        {
+            this.depositService = depositService;
+            this.mapper = mapper;
+        }
 
         private void Main()
         {
@@ -41,36 +51,31 @@ namespace DepositUI.Pages
 
         private async Task History()
         {
-            deposits = await GetDepositModels(0, 16);
-            nextdeposit += deposits.Count;
+            var depositsDTO = await this.depositService.GetDepositsAsync(0, 16);
+            deposits = this.mapper.Map<List<DepositModel>>(depositsDTO);
+            nextdeposit = deposits.Count;
             mode = ModeType.History;
-        }
-
-        private async Task Details(int depositId)
-        {
-            var model = new GetDepositDetails
-            {
-                DepositId = depositId
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/depositcalc");
-            request.Content = JsonContent.Create<GetDepositDetails>(model);
-
-            var client = ClientFactory.CreateClient();
-            response = await client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
-            }
-            this.depositId = depositId;
-            mode = ModeType.Details;
         }
 
         private async Task LoadMore()
         {
-            var loaded = await GetDepositModels(nextdeposit, 16);
+            var loadedDTO = await this.depositService.GetDepositsAsync(nextdeposit, 16);
+            var loaded = this.mapper.Map<List<DepositModel>>(loadedDTO);
             deposits.AddRange(loaded);
             nextdeposit += loaded.Count;
+        }
+
+        private async Task Details(int depositId)
+        {
+            var loadedDTO = await this.depositService.GetDepositDetailsAsync(depositId);
+
+            if (loadedDTO == null)
+            {
+                return;
+            }
+            depositDetails = mapper.Map<List<DepositCalc>>(loadedDTO);
+            this.depositId = depositId;
+            mode = ModeType.Details;
         }
 
         private async Task GetDepositCalc()
@@ -110,47 +115,15 @@ namespace DepositUI.Pages
                 getDepositError = true;
             }
 
-            DepositModel deposit = new DepositModel()
+            DepositDTO deposit = new DepositDTO()
             {
                 Amount = amount,
                 Percent = persent,
                 Term = term
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/calculate");
-            request.Content = JsonContent.Create<DepositModel>(deposit);
-
-            var client = ClientFactory.CreateClient();
-            response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
-            }
-            else
-            {
-                requestErrors.AddRange(await response.Content.ReadFromJsonAsync<List<RequestError>>());
-                getDepositError = true;
-            }
-        }
-
-        private async Task<List<DepositModel>> GetDepositModels(int startIndex, int count)
-        {
-            var model = new GetDepositsModel
-            {
-                StartIndex = startIndex,
-                Count = count
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44320/api/deposit");
-            request.Content = JsonContent.Create<GetDepositsModel>(model);
-
-            var client = ClientFactory.CreateClient();
-            response = await client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<List<DepositModel>>();
-            }
-            return null;
+            var depositDetailsDTO = await this.depositService.CalculateDepositAsync(deposit);
+            depositDetails = this.mapper.Map<List<DepositCalc>>(depositDetailsDTO);
         }
 
         private string NumberInputCheck(string input)

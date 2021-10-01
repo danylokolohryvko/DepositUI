@@ -1,12 +1,9 @@
-﻿
-using DepositUI.BLL.DTOs;
+﻿using DepositUI.BLL.DTOs;
 using DepositUI.BLL.HttpModels;
 using DepositUI.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DepositUI.BLL.Services
