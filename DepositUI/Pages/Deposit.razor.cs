@@ -3,45 +3,31 @@ using DepositUI.BLL.DTOs;
 using DepositUI.BLL.Interfaces;
 using DepositUI.Data;
 using DepositUI.Enums;
-using System;
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DepositUI.Pages
 {
     public partial class Deposit
     {
-        private readonly IDepositService depositService;
-        private readonly IMapper mapper;
+        [Inject]
+        private IDepositService depositService { get; set; }
+        [Inject]
+        private IMapper mapper { get; set; }
 
-        private const int columnNumber = 4;
+        //General
         private ModeType mode = ModeType.Main;
 
+        //Main and Details
         private List<DepositCalc> depositDetails;
-        private List<RequestError> requestErrors;
-
-        private string AmountStr { get { return amountStr; } set { amountStr = NumberInputCheck(value); } }
-        private string amountStr;
-
-        private string TermStr { get { return termStr; } set { termStr = NumberInputCheck(value); } }
-        private string termStr;
-
-        private string PercentStr { get { return percentStr; } set { percentStr = NumberInputCheck(value); } }
-        private string percentStr;
-
-        private bool getDepositError;
-
-        private List<DepositModel> deposits;
-        private int nextdeposit = 0;
-
+        private DepositModel deposit = new DepositModel();
         private int depositId;
 
-        public Deposit(IDepositService depositService, IMapper mapper)
-        {
-            this.depositService = depositService;
-            this.mapper = mapper;
-        }
+        //History
+        private const int columnNumber = 4;
+        private int nextdeposit = 0;
+        private List<DepositModel> deposits;
 
         private void Main()
         {
@@ -80,56 +66,9 @@ namespace DepositUI.Pages
 
         private async Task GetDepositCalc()
         {
-            requestErrors = new List<RequestError>();
-            double amount;
-            double persent;
-            int term;
-
-            if (!Double.TryParse(NumberInputCheck(amountStr), out amount))
-            {
-                requestErrors.Add(new RequestError
-                {
-                    PropertyName = "Amount",
-                    ErrorMessage = "Amount is not number"
-                });
-                getDepositError = true;
-            }
-
-            if (!Double.TryParse(NumberInputCheck(percentStr), out persent))
-            {
-                requestErrors.Add(new RequestError
-                {
-                    PropertyName = "Percent",
-                    ErrorMessage = "Percent is not number"
-                });
-                getDepositError = true;
-            }
-
-            if (!Int32.TryParse(NumberInputCheck(termStr), out term))
-            {
-                requestErrors.Add(new RequestError
-                {
-                    PropertyName = "Term",
-                    ErrorMessage = "Term is not number"
-                });
-                getDepositError = true;
-            }
-
-            DepositDTO deposit = new DepositDTO()
-            {
-                Amount = amount,
-                Percent = persent,
-                Term = term
-            };
-
-            var depositDetailsDTO = await this.depositService.CalculateDepositAsync(deposit);
+            var depositDTO = this.mapper.Map<DepositDTO>(deposit);
+            var depositDetailsDTO = await this.depositService.CalculateDepositAsync(depositDTO);
             depositDetails = this.mapper.Map<List<DepositCalc>>(depositDetailsDTO);
-        }
-
-        private string NumberInputCheck(string input)
-        {
-            string res = string.Join("", input.Where(c => char.IsDigit(c) || c == '.' || c == ','));
-            return res;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace DepositUI.AutoMapper
         {
             CreateMap<DepositCalcDTO, DepositCalc>();
             CreateMap<DepositDTO, DepositModel>();
+            CreateMap<DepositCalc, DepositCalcDTO>();
+            CreateMap<DepositModel, DepositDTO>();
         }
     }
 }

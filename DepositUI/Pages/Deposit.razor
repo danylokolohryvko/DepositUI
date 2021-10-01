@@ -1,8 +1,6 @@
 ﻿@page "/deposit"
-@using DepositUI.Data
-@using DepositUI.Components
-@using DepositUI.Enums
-@inject IHttpClientFactory ClientFactory;
+@using DepositUI.Components;
+@using DepositUI.Enums;
 
 <h1>Deposit Calculations</h1>
 
@@ -18,21 +16,16 @@
 {
     <div class="row tab">
         <div class="col-4">
-            <input type="text" @bind-value="PercentStr" @bind-value:event="oninput" placeholder="Percents" /> <br />
-            <input type="text" @bind-value="TermStr" @bind-value:event="oninput" placeholder="Terms" /> <br />
-            <input type="text" @bind-value="AmountStr" @bind-value:event="oninput" placeholder="Summ" /> <br />
+            <EditForm Model="@deposit" OnValidSubmit="@GetDepositCalc">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <button class="submit-btn" @onclick="GetDepositCalc"> Calculate </button>
+                <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
+                <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
+                <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
 
-            @if (getDepositError && requestErrors != null && requestErrors.Count > 0)
-            {
-                <div>
-                    @foreach (RequestError error in requestErrors)
-                    {
-                        <span class="request-error">@error.PropertyName : @error.ErrorMessage </span><br />
-                    }
-                </div>
-            }
+                <button type="submit">Calculate</button>
+            </EditForm>
         </div>
         <div class="col-8">
             <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
