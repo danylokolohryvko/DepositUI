@@ -43,16 +43,16 @@ else if (mode == ModeType.History)
 {
 <div class="skrollable history">
     <div class="row">
-        @for (int i = 0; i < 4; i++)
+        @for (int i = 0; i < columnNumber; i++)
         {
             <div class="col-3">
                 @if (deposits != null)
                 {
-                    @for (int j = 0; j < deposits.Count; j++)
+                    @for (int j = 0; j < deposits.Count / columnNumber + 1; j++)
                     {
                         if (j * 4 + i < deposits.Count)
                         {
-                            var depositNumber = j * 4 + i;
+                            var depositNumber = j * columnNumber + i;
                             <div class="deposit-block">
                                 <div class="deposit-details">
                                     <div class="align-left">

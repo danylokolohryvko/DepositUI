@@ -13,9 +13,9 @@ namespace DepositUI.Pages
     public partial class Deposit
     {
         private readonly IDepositService depositService;
-
         private readonly IMapper mapper;
 
+        private const int columnNumber = 4;
         private ModeType mode = ModeType.Main;
 
         private List<DepositCalc> depositDetails;
