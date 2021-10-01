@@ -78,7 +78,7 @@ else if (mode == ModeType.Details)
 {
     <div class="tab">
         <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
-        <form action="https://localhost:44320/api/depositcalc/csv">
+        <form action="@Configuration.GetSection("ApiURLs").GetSection("GetDepostCSV").Value">
             <input type="hidden" name="depositId" value="@depositId" />
             <button type="submit" class="submit-btn">Export to CSV</button>
         </form>
