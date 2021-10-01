@@ -1,3 +1,4 @@
+using DepositUI.AutoMapper;
 using DepositUI.BLL.Interfaces;
 using DepositUI.BLL.Services;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,7 @@ namespace DepositUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDepositService, DepositService>();
+            services.AddAutoMapper(typeof(MapperProfile));
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient();
