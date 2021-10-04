@@ -12,6 +12,8 @@ namespace DepositUI.Pages
 {
     public partial class Deposit
     {
+        private const string getDepostCSV = "https://localhost:44320/api/depositcalculation/csv";
+
         [Inject]
         private IDepositService DepositService { get; set; }
         [Inject]
