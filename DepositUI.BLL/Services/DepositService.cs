@@ -11,25 +11,25 @@ namespace DepositUI.BLL.Services
 {
     public class DepositService : IDepositService
     {
-        private const string depositsUrl = "https://localhost:44320/api/deposit";
-        private const string depositCalculationUrl = "https://localhost:44320/api/depositcalculation";
-        private const string calculateDepositUrl = "https://localhost:44320/api/calculate";
+        private readonly string depositsUrl = "https://localhost:44320/api/deposit";
+        private readonly string depositCalculationUrl = "https://localhost:44320/api/depositcalculation";
+        private readonly string calculateDepositUrl = "https://localhost:44320/api/calculate";
         private readonly HttpClient client;
 
 
-        public DepositService(HttpClient client, IConfiguration configuration)
+        public DepositService(HttpClient client, IConfiguration config)
         {
             this.client = client;
+            this.depositsUrl = config.GetSection("ApiURLs").GetSection("GetDeposits").Value;
+            this.depositCalculationUrl = config.GetSection("ApiURLs").GetSection("GetDepositCalculations").Value;
+            this.calculateDepositUrl = config.GetSection("ApiURLs").GetSection("CalculateDeposit").Value;
         } 
 
         public async Task<List<DepositDTO>> GetDepositsAsync(int startIndex, int count)
         {
-            var model = new GetDepositsModel
-            {
-                StartIndex = startIndex,
-                Count = count
-            };
-            var response = await this.SendRequestAsync(HttpMethod.Post, depositsUrl, JsonContent.Create<GetDepositsModel>(model));
+            var url = $"{depositsUrl}?StartIndex={startIndex}&Count={count}";
+            var response = await this.SendRequestAsync(HttpMethod.Get, url);
+            
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositDTO>>();
@@ -39,11 +39,8 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositCalcDTO>> GetDepositDetailsAsync(int depositId)
         {
-            var model = new GetDepositDetails
-            {
-                DepositId = depositId
-            };
-            var response = await this.SendRequestAsync(HttpMethod.Post, depositCalculationUrl, JsonContent.Create<GetDepositDetails>(model));
+            var url = $"{depositCalculationUrl}?DepositId={depositId}";
+            var response = await this.SendRequestAsync(HttpMethod.Get, url);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
@@ -53,7 +50,8 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositCalcDTO>> CalculateDepositAsync(DepositDTO deposit)
         {
-            var response = await this.SendRequestAsync(HttpMethod.Post, calculateDepositUrl, JsonContent.Create<DepositDTO>(deposit));
+            var url = $"{calculateDepositUrl}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
+            var response = await this.SendRequestAsync(HttpMethod.Get, url);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
@@ -61,10 +59,9 @@ namespace DepositUI.BLL.Services
             return null;
         }
 
-        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method,string url, HttpContent content)
+        private async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method,string url)
         {
             var request = new HttpRequestMessage(method, url);
-            request.Content = content;
             return await client.SendAsync(request);
         }
     }

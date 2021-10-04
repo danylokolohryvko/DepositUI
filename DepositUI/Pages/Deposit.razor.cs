@@ -18,8 +18,6 @@ namespace DepositUI.Pages
         private IDepositService DepositService { get; set; }
         [Inject]
         private IMapper Mapper { get; set; }
-        [Inject]
-        private IConfiguration Configuration { get; set; }
 
         //General
         private ModeType mode = ModeType.Main;
