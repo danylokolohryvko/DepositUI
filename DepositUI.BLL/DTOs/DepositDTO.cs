@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace DepositUI.Data
+namespace DepositUI.BLL.DTOs
 {
-    public class DepositModel
+    public class DepositDTO
     {
         public int Id { get; set; }
 

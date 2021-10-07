@@ -181,8 +181,7 @@ app {
         display: block;
     }
 
-    /*-----------------------------------------------------------------------*/
-
+    /* ------------------------------------------------------------------------------------------- */
     h1 {
         text-align: center;
     }
@@ -193,11 +192,6 @@ app {
 
     input {
         margin-bottom: 10px;
-    }
-
-    .deposit-btn-cont {
-        width: 100%;
-        display: block;
     }
 
     .align-left {
@@ -213,8 +207,8 @@ app {
     }
 
     .details-btn {
-        margin-top: 50px;
-        margin-bottom: 10px;
+        margin: 10px;
+        border-radius: 5px;
     }
 
     .deposit-block {
@@ -224,12 +218,12 @@ app {
     }
 
     .deposit-details {
-        min-width: 300px;
-        display: block;
+        margin-bottom: 60px;
     }
 
     .history {
         height: 500px;
+        max-width: 1200px;
     }
 
     .tab {
@@ -295,7 +289,8 @@ app {
 
     .skrollable {
         display: block;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     tbody {

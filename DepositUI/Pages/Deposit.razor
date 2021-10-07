@@ -1,136 +1,86 @@
 ﻿@page "/deposit"
-
-@using DepositUI.Data
-@using DepositUI.Components
-@using System.Text.Json
-@using System.Text.Json.Serialization;
-@using System.Net.Http.Json;
-@inject IHttpClientFactory ClientFactory;
+@using DepositUI.Components;
+@using DepositUI.Enums;
 
 <h1>Deposit Calculations</h1>
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a @onclick="Main" class="nav-link@(mode == "Main" ? " active" : "")">Calculations</a>
+        <a @onclick="Main" class="nav-link@(mode == ModeType.Main ? " active" : "")">Calculations</a>
     </li>
     <li class="nav-item">
-        <a @onclick="History" class="nav-link@(mode != "Main" ? " active" : "")">History</a>
+        <a @onclick="History" class="nav-link@(mode != ModeType.Main ? " active" : "")">History</a>
     </li>
 </ul>
-@if (mode == "Main")
+@if (mode == ModeType.Main)
 {
     <div class="row tab">
         <div class="col-4">
-            <input type="text" @bind-value="PercentStr" @bind-value:event="oninput" placeholder="Percents" /> <br />
-            <input type="text" @bind-value="TermStr" @bind-value:event="oninput" placeholder="Terms" /> <br />
-            <input type="text" @bind-value="AmountStr" @bind-value:event="oninput" placeholder="Summ" /> <br />
+            <EditForm Model="@deposit" OnValidSubmit="@GetDepositCalc">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <button class="submit-btn" @onclick="GetDepositCalc"> Calculate </button>
+                <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
+                <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
+                <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
 
-            @if (getDepositError && requestErrors != null && requestErrors.Count > 0)
-            {
-                <div>
-                    @foreach (RequestError error in requestErrors)
-                    {
-                        <span class="request-error">@error.PropertyName : @error.ErrorMessage </span><br />
-                    }
-                </div>
-            }
+                <button type="submit">Calculate</button>
+            </EditForm>
         </div>
         <div class="col-8">
             <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
         </div>
     </div>
 }
-
-@code {
-    private string mode = "Main";
-
-    private List<DepositCalc> depositDetails;
-    private List<RequestError> requestErrors;
-
-    private string AmountStr { get { return amountStr; } set { amountStr = NumberInputCheck(value); } }
-    private string amountStr;
-
-    private string TermStr { get { return termStr; } set { termStr = NumberInputCheck(value); } }
-    private string termStr;
-
-    private string PercentStr { get { return percentStr; } set { percentStr = NumberInputCheck(value); } }
-    private string percentStr;
-
-    private bool getDepositError;
-    private HttpResponseMessage response = null;
-
-    private async Task Main() { }
-
-    private async Task History() { }
-
-    private async Task Details() { }
-
-    private async Task GetDepositCalc()
-    {
-        requestErrors = new List<RequestError>();
-        double amount;
-        double persent;
-        int term;
-
-        if (!Double.TryParse(NumberInputCheck(amountStr), out amount))
+else if (mode == ModeType.History)
+{
+<div class="skrollable history">
+    <div class="row">
+        @for (int i = 0; i < columnNumber; i++)
         {
-            requestErrors.Add(new RequestError
-            {
-                PropertyName = "Amount",
-                ErrorMessage = "Amount is not number"
-            });
-            getDepositError = true;
+            <div class="col-3">
+                @if (deposits != null)
+                {
+                    @for (int j = 0; j < deposits.Count / columnNumber + 1; j++)
+                    {
+                        if (j * 4 + i < deposits.Count)
+                        {
+                            var depositNumber = j * columnNumber + i;
+                            <div class="deposit-block">
+                                <div class="deposit-details">
+                                    <div class="align-left">
+                                        <span>Percent:</span><br />
+                                        <span>Term:</span><br />
+                                        <span>Sum:</span><br />
+                                        <span>Date:</span>
+                                    </div>
+                                    <div class=" align-right">
+                                        <span>@(deposits[depositNumber].Percent)%</span><br />
+                                        <span>@(deposits[depositNumber].Term)</span><br />
+                                        <span>@(deposits[depositNumber].Amount)$</span><br />
+                                        <span>@(deposits[depositNumber].Date.ToString("dd.MM.yyyy"))</span>
+                                    </div>
+                                </div>
+                                <div class="deposit-btn-cont">
+                                    <button @onclick="() => Details(deposits[depositNumber].Id)" class="details-btn">See details</button>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
         }
-
-        if (!Double.TryParse(NumberInputCheck(percentStr), out persent))
-        {
-            requestErrors.Add(new RequestError
-            {
-                PropertyName = "Percent",
-                ErrorMessage = "Percent is not number"
-            });
-            getDepositError = true;
-        }
-
-        if (!Int32.TryParse(NumberInputCheck(termStr), out term))
-        {
-            requestErrors.Add(new RequestError
-            {
-                PropertyName = "Term",
-                ErrorMessage = "Term is not number"
-            });
-            getDepositError = true;
-        }
-
-        DepositModel deposit = new DepositModel()
-        {
-            Amount = amount,
-            Percent = persent,
-            Term = term
-        };
-
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44365/api/calculate");
-        request.Content = JsonContent.Create<DepositModel>(deposit);
-
-        var client = ClientFactory.CreateClient();
-        response = await client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
-        {
-            depositDetails = await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
-        }
-        else
-        {
-            using var responseStream = await response.Content.ReadAsStreamAsync();
-            requestErrors.AddRange(await JsonSerializer.DeserializeAsync<List<RequestError>>(responseStream));
-            getDepositError = true;
-        }
-    }
-
-    private string NumberInputCheck(string input)
-    {
-        string res = string.Join("", input.Where(c => char.IsDigit(c) || c == '.' || c == ','));
-        return res;
-    }
+    </div>
+    <button class="details-btn" @onclick="LoadMore">Load More</button>
+</div>
+}
+else if (mode == ModeType.Details)
+{
+    <div class="tab">
+        <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+        <form method="get" action="@getDepostCSV">
+            <input type="hidden" name="depositId" value="@depositId" />
+            <button type="submit" class="submit-btn">Export to CSV</button>
+        </form>
+    </div>
 }
