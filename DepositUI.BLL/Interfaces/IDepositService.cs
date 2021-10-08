@@ -11,5 +11,7 @@ namespace DepositUI.BLL.Interfaces
         public Task<List<DepositCalcDTO>> GetDepositDetailsAsync(int depositId);
 
         public Task<List<DepositCalcDTO>> CalculateDepositAsync(DepositDTO deposit);
+
+        public Task<string> GetDepositCSV(int depositId);
     }
 }

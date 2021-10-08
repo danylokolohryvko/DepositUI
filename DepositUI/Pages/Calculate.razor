@@ -1,0 +1,23 @@
+﻿@page "/deposit"
+
+<h1>Deposit Calculations</h1>
+
+<NavTabs Mode="ModeType.Main"/>
+
+<div class="row tab">
+    <div class="col-4">
+        <EditForm Model="@deposit" OnValidSubmit="@GetDepositCalc">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
+            <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
+            <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
+
+            <button type="submit">Calculate</button>
+        </EditForm>
+    </div>
+    <div class="col-8">
+        <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+    </div>
+</div>

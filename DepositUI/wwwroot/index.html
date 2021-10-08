@@ -19,6 +19,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function tableResize() {
@@ -29,6 +30,15 @@
         function SetTableResize() {
             $(window).resize(tableResize);
             tableResize();
+        }
+
+        function SaveFile(file, Content) {
+            var link = document.createElement('a');
+            link.download = name;
+            link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(Content)
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

@@ -1,39 +1,9 @@
-﻿@page "/deposit"
-@using DepositUI.Components;
-@using DepositUI.Enums;
+﻿@page "/deposit/history"
 
 <h1>Deposit Calculations</h1>
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a @onclick="Main" class="nav-link@(mode == ModeType.Main ? " active" : "")">Calculations</a>
-    </li>
-    <li class="nav-item">
-        <a @onclick="History" class="nav-link@(mode != ModeType.Main ? " active" : "")">History</a>
-    </li>
-</ul>
-@if (mode == ModeType.Main)
-{
-    <div class="row tab">
-        <div class="col-4">
-            <EditForm Model="@deposit" OnValidSubmit="@GetDepositCalc">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+<NavTabs Mode="ModeType.History" />
 
-                <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
-                <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
-                <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
-
-                <button type="submit">Calculate</button>
-            </EditForm>
-        </div>
-        <div class="col-8">
-            <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
-        </div>
-    </div>
-}
-else if (mode == ModeType.History)
-{
 <div class="skrollable history">
     <div class="row">
         @for (int i = 0; i < columnNumber; i++)
@@ -46,6 +16,7 @@ else if (mode == ModeType.History)
                         if (j * 4 + i < deposits.Count)
                         {
                             var depositNumber = j * columnNumber + i;
+                            var url = $"/deposit/details/{deposits[depositNumber].Id}";
                             <div class="deposit-block">
                                 <div class="deposit-details">
                                     <div class="align-left">
@@ -62,7 +33,7 @@ else if (mode == ModeType.History)
                                     </div>
                                 </div>
                                 <div class="deposit-btn-cont">
-                                    <button @onclick="() => Details(deposits[depositNumber].Id)" class="details-btn">See details</button>
+                                    <button @onclick="() => Navigation.NavigateTo(url)" class="details-btn">See details</button>
                                 </div>
                             </div>
                         }
@@ -73,14 +44,3 @@ else if (mode == ModeType.History)
     </div>
     <button class="details-btn" @onclick="LoadMore">Load More</button>
 </div>
-}
-else if (mode == ModeType.Details)
-{
-    <div class="tab">
-        <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
-        <form method="get" action="@getDepostCSV">
-            <input type="hidden" name="depositId" value="@depositId" />
-            <button type="submit" class="submit-btn">Export to CSV</button>
-        </form>
-    </div>
-}

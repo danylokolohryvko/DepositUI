@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositUI", "DepositUI\DepositUI.csproj", "{8F0A9B70-9725-4148-ACE5-702AE2FBA65F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositUI.BLL", "DepositUI.BLL\DepositUI.BLL.csproj", "{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositUI.BLL", "DepositUI.BLL\DepositUI.BLL.csproj", "{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
