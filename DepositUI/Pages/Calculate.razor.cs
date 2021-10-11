@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using DepositUI.BLL.DTOs;
-using DepositUI.BLL.Interfaces;
-using DepositUI.Data;
+﻿using DepositUI.BLL.Interfaces;
+using DepositUI.Core.Data;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,14 +13,10 @@ namespace DepositUI.Pages
 
         [Inject]
         private IDepositService DepositService { get; set; }
-        [Inject]
-        private IMapper Mapper { get; set; }
 
         private async Task GetDepositCalc()
         {
-            var depositDTO = this.Mapper.Map<DepositDTO>(deposit);
-            var depositDetailsDTO = await this.DepositService.CalculateDepositAsync(depositDTO);
-            depositDetails = this.Mapper.Map<List<DepositCalc>>(depositDetailsDTO);
+            depositDetails = await this.DepositService.CalculateDepositAsync(deposit);
         }
     }
 }

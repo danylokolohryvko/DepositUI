@@ -1,6 +1,5 @@
-﻿using AutoMapper;
-using DepositUI.BLL.Interfaces;
-using DepositUI.Data;
+﻿using DepositUI.BLL.Interfaces;
+using DepositUI.Core.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -19,8 +18,6 @@ namespace DepositUI.Pages
         [Inject]
         private IDepositService DepositService { get; set; }
         [Inject]
-        private IMapper Mapper { get; set; }
-        [Inject]
         private IJSRuntime JS { get; set; }
         [Inject]
         private AuthenticationStateProvider Context { get; set; }
@@ -38,8 +35,7 @@ namespace DepositUI.Pages
             }
             else
             {
-                var depositDetailsDTO = await this.DepositService.GetDepositDetailsAsync(DepositId);
-                depositDetails = this.Mapper.Map<List<DepositCalc>>(depositDetailsDTO);
+                depositDetails = await this.DepositService.GetDepositDetailsAsync(DepositId);
             }
         }
 

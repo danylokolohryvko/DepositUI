@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using DepositUI.BLL.Interfaces;
-using DepositUI.Data;
+﻿using DepositUI.BLL.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using DepositUI.Core.Data;
 
 namespace DepositUI.Pages
 {
@@ -17,8 +16,6 @@ namespace DepositUI.Pages
 
         [Inject]
         private IDepositService DepositService { get; set; }
-        [Inject]
-        private IMapper Mapper { get; set; }
         [Inject]
         private AuthenticationStateProvider Context { get; set; }
         [Inject]
@@ -35,16 +32,14 @@ namespace DepositUI.Pages
             }
             else
             {
-                var depositsDTO = await this.DepositService.GetDepositsAsync(0, 16);
-                deposits = this.Mapper.Map<List<DepositModel>>(depositsDTO);
+                deposits = await this.DepositService.GetDepositsAsync(0, 16);
                 nextdeposit = deposits.Count;
             }
         }
 
         private async Task LoadMore()
         {
-            var loadedDTO = await this.DepositService.GetDepositsAsync(nextdeposit, 16);
-            var loaded = this.Mapper.Map<List<DepositModel>>(loadedDTO);
+            var loaded = await this.DepositService.GetDepositsAsync(nextdeposit, 16);
             deposits.AddRange(loaded);
             nextdeposit += loaded.Count;
         }

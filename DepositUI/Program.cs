@@ -1,4 +1,3 @@
-using DepositUI.AutoMapper;
 using DepositUI.BLL.Interfaces;
 using DepositUI.BLL.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -25,7 +24,6 @@ namespace DepositUI
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddScoped<IDepositService, DepositService>();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddAutoMapper(typeof(MapperProfile));
 
             await builder.Build().RunAsync();
         }

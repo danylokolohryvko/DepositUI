@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositUI", "DepositUI\Depo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositUI.BLL", "DepositUI.BLL\DepositUI.BLL.csproj", "{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositUI.Core", "DepositUI.Core\DepositUI.Core.csproj", "{26FC330E-4B2C-4D26-B87C-E68323F61500}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BF7FAF6-3D3B-4DD5-A371-62912373F5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26FC330E-4B2C-4D26-B87C-E68323F61500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26FC330E-4B2C-4D26-B87C-E68323F61500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26FC330E-4B2C-4D26-B87C-E68323F61500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26FC330E-4B2C-4D26-B87C-E68323F61500}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

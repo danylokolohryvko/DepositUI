@@ -1,5 +1,5 @@
-﻿using DepositUI.BLL.DTOs;
-using DepositUI.BLL.Interfaces;
+﻿using DepositUI.BLL.Interfaces;
+using DepositUI.Core.Data;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -30,40 +30,40 @@ namespace DepositUI.BLL.Services
             this.tokenProvider = tokenProvider;
         } 
 
-        public async Task<List<DepositDTO>> GetDepositsAsync(int startIndex, int count)
+        public async Task<List<DepositModel>> GetDepositsAsync(int startIndex, int count)
         {
             var url = $"{depositsUrl}?StartIndex={startIndex}&Count={count}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
             
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<DepositDTO>>();
+                return await response.Content.ReadFromJsonAsync<List<DepositModel>>();
             }
 
             return null;
         }
 
-        public async Task<List<DepositCalcDTO>> GetDepositDetailsAsync(int depositId)
+        public async Task<List<DepositCalc>> GetDepositDetailsAsync(int depositId)
         {
             var url = $"{depositCalculationUrl}?DepositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
+                return await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
             }
 
             return null;
         }
 
-        public async Task<List<DepositCalcDTO>> CalculateDepositAsync(DepositDTO deposit)
+        public async Task<List<DepositCalc>> CalculateDepositAsync(DepositModel deposit)
         {
             var url = $"{calculateDepositUrl}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
+                return await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
             }
 
             return null;
