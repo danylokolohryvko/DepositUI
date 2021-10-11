@@ -1,5 +1,6 @@
 ﻿using DepositUI.BLL.Interfaces;
 using DepositUI.Core.Data;
+using DepositUI.Core.Configuration;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -12,21 +13,17 @@ namespace DepositUI.BLL.Services
 {
     public class DepositService : IDepositService
     {
-        private readonly string depositsUrl;
-        private readonly string depositCalculationUrl;
-        private readonly string calculateDepositUrl;
-        private readonly string getDepositCSVUrl;
+        private readonly string depositsUrl = Urls.Deposits;
+        private readonly string depositCalculationUrl = Urls.DepositCalculations;
+        private readonly string calculateDepositUrl = Urls.CalculateDeposit;
+        private readonly string DepositCSVUrl = Urls.DepostCSV;
         private readonly HttpClient client;
         private readonly IAccessTokenProvider tokenProvider;
 
 
-        public DepositService(HttpClient client, IConfiguration config, IAccessTokenProvider tokenProvider)
+        public DepositService(HttpClient client, IAccessTokenProvider tokenProvider)
         {
             this.client = client;
-            this.depositsUrl = config.GetSection("ApiURLs").GetSection("GetDeposits").Value;
-            this.depositCalculationUrl = config.GetSection("ApiURLs").GetSection("GetDepositCalculations").Value;
-            this.calculateDepositUrl = config.GetSection("ApiURLs").GetSection("CalculateDeposit").Value;
-            this.getDepositCSVUrl = config.GetSection("ApiURLs").GetSection("GetDepostCSV").Value;
             this.tokenProvider = tokenProvider;
         } 
 
@@ -71,7 +68,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<string> GetDepositCSV(int depositId)
         {
-            var url = $"{getDepositCSVUrl}?depositId={depositId}";
+            var url = $"{DepositCSVUrl}?depositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if(response.IsSuccessStatusCode)
