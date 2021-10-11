@@ -30,6 +30,7 @@ namespace DepositUI.Pages
         protected override async Task OnInitializedAsync()
         {
             var user = (await Context.GetAuthenticationStateAsync()).User;
+
             if (user != null && !user.Identity.IsAuthenticated)
             {
                 Navigation.NavigateTo(

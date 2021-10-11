@@ -39,6 +39,7 @@ namespace DepositUI.BLL.Services
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositDTO>>();
             }
+
             return null;
         }
 
@@ -46,10 +47,12 @@ namespace DepositUI.BLL.Services
         {
             var url = $"{depositCalculationUrl}?DepositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
+
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
             }
+
             return null;
         }
 
@@ -57,10 +60,12 @@ namespace DepositUI.BLL.Services
         {
             var url = $"{calculateDepositUrl}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
+
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<List<DepositCalcDTO>>();
             }
+
             return null;
         }
 
@@ -68,10 +73,12 @@ namespace DepositUI.BLL.Services
         {
             var url = $"{getDepositCSVUrl}?depositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
+
             if(response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
+
             return null;
         }
 
