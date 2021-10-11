@@ -13,10 +13,6 @@ namespace DepositUI.BLL.Services
 {
     public class DepositService : IDepositService
     {
-        private readonly string depositsUrl = Urls.Deposits;
-        private readonly string depositCalculationUrl = Urls.DepositCalculations;
-        private readonly string calculateDepositUrl = Urls.CalculateDeposit;
-        private readonly string DepositCSVUrl = Urls.DepostCSV;
         private readonly HttpClient client;
         private readonly IAccessTokenProvider tokenProvider;
 
@@ -29,7 +25,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositModel>> GetDepositsAsync(int startIndex, int count)
         {
-            var url = $"{depositsUrl}?StartIndex={startIndex}&Count={count}";
+            var url = $"{Urls.GetDeposits}?StartIndex={startIndex}&Count={count}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
             
             if (response.IsSuccessStatusCode)
@@ -42,7 +38,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositCalc>> GetDepositDetailsAsync(int depositId)
         {
-            var url = $"{depositCalculationUrl}?DepositId={depositId}";
+            var url = $"{Urls.GetDepositCalculations}?DepositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
@@ -55,7 +51,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositCalc>> CalculateDepositAsync(DepositModel deposit)
         {
-            var url = $"{calculateDepositUrl}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
+            var url = $"{Urls.CalculateDeposit}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
@@ -68,7 +64,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<string> GetDepositCSV(int depositId)
         {
-            var url = $"{DepositCSVUrl}?depositId={depositId}";
+            var url = $"{Urls.GetDepositCSV}?depositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if(response.IsSuccessStatusCode)

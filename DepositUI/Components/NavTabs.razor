@@ -6,8 +6,3 @@
         <a href="@(Mode != ModeType.History ? "/deposit/history" : "")" class="nav-link@(Mode != ModeType.Main ? " active" : "" )">History</a>
     </li>
 </ul>
-
-@code {
-    [Parameter]
-    public ModeType Mode { get; set; }
-}

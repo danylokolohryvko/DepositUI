@@ -22,12 +22,3 @@
         }
     </tbody>
 </table>
-@code {
-    [Parameter]
-    public List<DepositCalc> DepositDetails { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JS.InvokeVoidAsync("SetTableResize");
-    }
-}
