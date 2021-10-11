@@ -39,7 +39,7 @@ namespace DepositUI.Pages
             }
         }
 
-        private async Task GetCSV(int depositId)
+        private async Task LoadDepositCSV(int depositId)
         {
             var stringCSV = await this.DepositService.GetDepositCSV(depositId);
             await JS.InvokeAsync<object>("SaveFile", $"deposit{depositId}.csv", stringCSV);

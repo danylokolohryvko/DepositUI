@@ -14,7 +14,7 @@ namespace DepositUI.Pages
         [Inject]
         private IDepositService DepositService { get; set; }
 
-        private async Task GetDepositCalc()
+        private async Task LoadDepositCalc()
         {
             depositDetails = await this.DepositService.CalculateDepositAsync(deposit);
         }
