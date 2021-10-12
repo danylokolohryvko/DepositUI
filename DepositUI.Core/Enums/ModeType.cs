@@ -1,4 +1,4 @@
-﻿namespace DepositUI.Enums
+﻿namespace DepositUI.Core.Enums
 {
     public enum ModeType
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DepositUI.Data
+namespace DepositUI.Core.Data
 {
     public class DepositCalc
     {

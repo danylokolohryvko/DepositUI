@@ -1,0 +1,10 @@
+﻿@page "/deposit/details/{DepositId:int}"
+
+<h1>Deposit Calculations</h1>
+
+<NavTabs Mode="ModeType.Details" />
+
+<div class="tab">
+    <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+    <button @onclick="() => LoadDepositCSV(DepositId)" type="submit" class="submit-btn">Export to CSV</button>
+</div>
