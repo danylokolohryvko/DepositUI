@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DepositUI.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +17,7 @@ namespace DepositUI.Core.Data
         public double? Percent { get; set; }
 
         public DateTime Date { get; set; }
+
+        public CalculationType CalculationType { get; set; }
     }
 }

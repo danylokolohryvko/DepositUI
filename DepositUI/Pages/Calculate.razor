@@ -10,9 +10,16 @@
             <DataAnnotationsValidator />
             <ValidationSummary />
 
-            <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
-            <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
-            <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
+            <div class="content-align-left">
+                <InputNumber placeholder="Percents" @bind-Value="deposit.Percent" /><br />
+                <InputNumber placeholder="Terms" @bind-Value="deposit.Term" /><br />
+                <InputNumber placeholder="Summ" @bind-Value="deposit.Amount" /><br />
+                <label> Calculation type:</label><br />
+                <input type="radio" name="CalculationType" @onclick="() => deposit.CalculationType = CalculationType.SimpleInterest" checked />
+                <label>Simple interest</label><br />
+                <input type="radio" name="CalculationType" @onclick="() => deposit.CalculationType = CalculationType.CompoundInterest">
+                <label>Compound interest</label>
+            </div><br/>
 
             <button type="submit">Calculate</button>
         </EditForm>

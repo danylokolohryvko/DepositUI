@@ -51,7 +51,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositCalc>> CalculateDepositAsync(DepositModel deposit)
         {
-            var url = $"{Urls.CalculateDeposit}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
+            var url = $"{Urls.CalculateDeposit}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}&CalculationType={deposit.CalculationType}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
