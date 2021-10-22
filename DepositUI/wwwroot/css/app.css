@@ -194,6 +194,11 @@ app {
         margin-bottom: 10px;
     }
 
+    .content-align-left {
+        display:inline-block;
+        text-align:left;
+    }
+
     .align-left {
         float: left;
         margin-left: 10px;

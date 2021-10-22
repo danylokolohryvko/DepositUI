@@ -1,4 +1,4 @@
-﻿using DepositUI.BLL.Interfaces;
+﻿using DepositUI.Core.Interfaces;
 using DepositUI.Core.Data;
 using DepositUI.Core.Configuration;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -25,7 +25,7 @@ namespace DepositUI.BLL.Services
 
         public async Task<List<DepositModel>> GetDepositsAsync(int startIndex, int count)
         {
-            var url = $"{Urls.GetDeposits}?StartIndex={startIndex}&Count={count}";
+            var url = $"{DepositCalculatorPaths.GetDeposits}?StartIndex={startIndex}&Count={count}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
             
             if (response.IsSuccessStatusCode)
@@ -36,35 +36,35 @@ namespace DepositUI.BLL.Services
             return null;
         }
 
-        public async Task<List<DepositCalc>> GetDepositDetailsAsync(int depositId)
+        public async Task<List<DepositCalculation>> GetDepositDetailsAsync(int depositId)
         {
-            var url = $"{Urls.GetDepositCalculations}?DepositId={depositId}";
+            var url = $"{DepositCalculatorPaths.GetDepositCalculations}?DepositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
+                return await response.Content.ReadFromJsonAsync<List<DepositCalculation>>();
             }
 
             return null;
         }
 
-        public async Task<List<DepositCalc>> CalculateDepositAsync(DepositModel deposit)
+        public async Task<List<DepositCalculation>> CalculateDepositAsync(DepositModel deposit)
         {
-            var url = $"{Urls.CalculateDeposit}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}";
+            var url = $"{DepositCalculatorPaths.CalculateDeposit}?Amount={deposit.Amount}&Term={deposit.Term}&Percent={deposit.Percent}&CalculationType={deposit.CalculationType}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<DepositCalc>>();
+                return await response.Content.ReadFromJsonAsync<List<DepositCalculation>>();
             }
 
             return null;
         }
 
-        public async Task<string> GetDepositCSV(int depositId)
+        public async Task<string> GetDepositCSVAsync(int depositId)
         {
-            var url = $"{Urls.GetDepositCSV}?depositId={depositId}";
+            var url = $"{DepositCalculatorPaths.GetDepositCSV}?depositId={depositId}";
             var response = await this.SendRequestAsync(HttpMethod.Get, url);
 
             if(response.IsSuccessStatusCode)
@@ -79,7 +79,12 @@ namespace DepositUI.BLL.Services
         {
             var tokenresult = await tokenProvider.RequestAccessToken();
             tokenresult.TryGetToken(out AccessToken token);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+
+            if(token != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+            }
+
             var request = new HttpRequestMessage(method, url);
 
             return await client.SendAsync(request);

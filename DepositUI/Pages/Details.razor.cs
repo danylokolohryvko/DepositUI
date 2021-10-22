@@ -1,4 +1,4 @@
-﻿using DepositUI.BLL.Interfaces;
+﻿using DepositUI.Core.Interfaces;
 using DepositUI.Core.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -11,7 +11,7 @@ namespace DepositUI.Pages
 {
     public partial class Details
     {
-        private List<DepositCalc> depositDetails;
+        public List<DepositCalculation> DepositDetails { get; private set; }
 
         [Parameter]
         public int DepositId { get; set; }
@@ -35,13 +35,13 @@ namespace DepositUI.Pages
             }
             else
             {
-                depositDetails = await this.DepositService.GetDepositDetailsAsync(DepositId);
+                DepositDetails = await this.DepositService.GetDepositDetailsAsync(DepositId);
             }
         }
 
         private async Task LoadDepositCSV(int depositId)
         {
-            var stringCSV = await this.DepositService.GetDepositCSV(depositId);
+            var stringCSV = await this.DepositService.GetDepositCSVAsync(depositId);
             await JS.InvokeAsync<object>("SaveFile", $"deposit{depositId}.csv", stringCSV);
         }
     }

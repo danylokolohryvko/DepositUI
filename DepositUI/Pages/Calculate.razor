@@ -6,18 +6,25 @@
 
 <div class="row tab">
     <div class="col-4">
-        <EditForm Model="@deposit" OnValidSubmit="@LoadDepositCalc">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+        <EditForm Model="@Deposit" OnValidSubmit="@LoadDepositCalc">
+            <div class="content-align-left">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <InputNumber placeholder="Percents" id="percent" @bind-Value="deposit.Percent" /><br />
-            <InputNumber placeholder="Terms" id="term" @bind-Value="deposit.Term" /><br />
-            <InputNumber placeholder="Summ" id="amount" @bind-Value="deposit.Amount" /><br />
+                <InputNumber class="percent" placeholder="Percents" @bind-Value="Deposit.Percent" /><br />
+                <InputNumber class="term" placeholder="Terms" @bind-Value="Deposit.Term" /><br />
+                <InputNumber class="amount" placeholder="Summ" @bind-Value="Deposit.Amount" /><br />
+                <label> Calculation type:</label><br />
+                <input type="radio" name="CalculationType" @onclick="() => Deposit.CalculationType = CalculationType.SimpleInterest" checked />
+                <label>Simple interest</label><br />
+                <input type="radio" name="CalculationType" @onclick="() => Deposit.CalculationType = CalculationType.CompoundInterest">
+                <label>Compound interest</label>
+            </div><br/>
 
             <button type="submit">Calculate</button>
         </EditForm>
     </div>
     <div class="col-8">
-        <DepositDetailsTable DepositDetails="depositDetails"> </DepositDetailsTable>
+        <DepositDetailsTable DepositDetails="DepositDetails"> </DepositDetailsTable>
     </div>
 </div>

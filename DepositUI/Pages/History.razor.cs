@@ -1,4 +1,4 @@
-﻿using DepositUI.BLL.Interfaces;
+﻿using DepositUI.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

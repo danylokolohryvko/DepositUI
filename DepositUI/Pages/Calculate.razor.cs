@@ -1,4 +1,4 @@
-﻿using DepositUI.BLL.Interfaces;
+﻿using DepositUI.Core.Interfaces;
 using DepositUI.Core.Data;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -8,15 +8,20 @@ namespace DepositUI.Pages
 {
     public partial class Calculate
     {
-        private List<DepositCalc> depositDetails;
-        private DepositModel deposit = new DepositModel();
+        public List<DepositCalculation> DepositDetails { get; private set; }
+        public DepositModel Deposit { get; private set; }
 
         [Inject]
         private IDepositService DepositService { get; set; }
 
+        public Calculate()
+        {
+            Deposit = new DepositModel();
+        }
+
         private async Task LoadDepositCalc()
         {
-            depositDetails = await this.DepositService.CalculateDepositAsync(deposit);
+            DepositDetails = await this.DepositService.CalculateDepositAsync(Deposit);
         }
     }
 }

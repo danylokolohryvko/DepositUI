@@ -1,4 +1,4 @@
-using DepositUI.BLL.Interfaces;
+using DepositUI.Core.Interfaces;
 using DepositUI.BLL.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
