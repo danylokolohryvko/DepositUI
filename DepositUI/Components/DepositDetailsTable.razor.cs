@@ -9,7 +9,7 @@ namespace DepositUI.Components
     public partial class DepositDetailsTable
     {
         [Parameter]
-        public List<DepositCalc> DepositDetails { get; set; }
+        public List<DepositCalculation> DepositDetails { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

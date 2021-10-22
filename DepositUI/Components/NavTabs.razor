@@ -1,8 +1,8 @@
 ﻿<ul class="nav nav-tabs">
     <li class="nav-item">
-        <a href="@(Mode != ModeType.Main ? "/deposit" : "")" class="nav-link@(Mode == ModeType.Main ? " active" : "" )">Calculations</a>
+        <a href="@(Mode != ModeType.Main ? "/deposit" : null)" class="nav-link@(Mode == ModeType.Main ? " active" : "" )">Calculations</a>
     </li>
     <li class="nav-item">
-        <a href="@(Mode != ModeType.History ? "/deposit/history" : "")" class="nav-link@(Mode != ModeType.Main ? " active" : "" )">History</a>
+        <a href="@(Mode != ModeType.History ? "/deposit/history" : null)" class="nav-link@(Mode != ModeType.Main ? " active" : "" )">History</a>
     </li>
 </ul>
